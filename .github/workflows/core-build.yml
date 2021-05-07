@@ -8,8 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [clang, clang11]
-    runs-on: ubuntu-latest
+        compiler: [clang]
+    runs-on: ubuntu-20.04
     name: ${{ matrix.compiler }}
     env:
       COMPILER: ${{ matrix.compiler }}
@@ -19,6 +19,10 @@ jobs:
           repository: 'azerothcore/azerothcore-wotlk'
           ref: 'master'
           submodules: 'recursive'
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          path: 'modules/mod-starting-pet'
       - name: Cache
         uses: actions/cache@v2
         with:
