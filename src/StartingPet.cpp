@@ -1,0 +1,117 @@
+/*
+ *  Module for AzerothCore by Gozzim (https://github.com/Gozzim)
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published
+ *  by the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "StartingPet.h"
+
+enum HunterVars
+{
+    SPELL_TAME_BEAST    = 13481,
+    PET_MAX_HAPPINESS   = 1048000
+};
+
+StartingPet* StartingPet::instance()
+{
+    static StartingPet instance;
+    return &instance;
+}
+
+std::string StartingPet::RandName()
+{
+    uint16 const len = urand(4, 8);
+    std::ostringstream newName;
+    std::string nextChar;
+    for (uint8 i = 1; i < len + 1; i++)
+    {
+        if (i == 1)
+        {
+            nextChar = toupper(_consonants[urand(0, _consonants.length() - 1)]);
+        }
+        else if (i % 2 == 0 || i % 5 == 0)
+        {
+            nextChar = _vowels[urand(0, _vowels.length() - 1)];
+        }
+        else
+        {
+            nextChar = _consonants[urand(0, _consonants.length() - 1)];
+        }
+        newName << nextChar;
+    }
+    return newName.str();
+}
+
+void StartingPet::CreateRandomPet(Player* player, bool petName)
+{
+    uint32 entry;
+    std::string newName;
+    entry = _pets[urand(0, 204)];
+
+    // Generate new name for pet
+    if (petName)
+        newName = RandName();
+
+    Pet* pet = player->CreateTamedPetFrom(entry, SPELL_TAME_BEAST);
+    if (!pet)
+    {
+        return;
+    }
+
+    float px, py, pz;
+    player->GetClosePoint(px, py, pz, pet->GetObjectSize(), PET_FOLLOW_DIST, pet->GetFollowAngle());
+    if (!pet->IsPositionValid())
+    {
+        sLog->outError("Pet (entry %d) not loaded. Suggested coordinates isn't valid (X: %f Y: %f)", pet->GetEntry(), pet->GetPositionX(), pet->GetPositionY());
+        delete pet;
+        return;
+    }
+    pet->Relocate(px, py, pz, player->GetOrientation());
+
+    pet->SetGuidValue(UNIT_FIELD_CREATEDBY, player->GetGUID());
+    pet->SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, player->getFaction());
+    pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel());
+
+    pet->SetPower(POWER_HAPPINESS, PET_MAX_HAPPINESS);
+    pet->SetReactState(REACT_DEFENSIVE);
+
+    // Add to world
+    pet->GetMap()->AddToMap(pet->ToCreature());
+
+    pet->SetFullHealth();
+    pet->GetCharmInfo()->SetPetNumber(sObjectMgr->GeneratePetNumber(), true);
+
+    // Caster has pet now
+    player->SetMinion(pet, true);
+
+    // Set pet name
+    if (!newName.empty())
+        pet->SetName(newName);
+
+    // Initialize Pet Stats
+    pet->InitTalentForLevel();
+    pet->InitStatsForLevel(player->getLevel());
+
+    pet->SavePetToDB(PET_SAVE_AS_CURRENT, false);
+    player->PetSpellInitialize();
+}
+
+void StartingPet::LearnPetSpells(Player* player)
+{
+    for (uint32 i = 0; i < _hunterPetSpells.size(); ++i)
+    {
+        player->learnSpell(_hunterPetSpells[i]);
+    }
+}
+

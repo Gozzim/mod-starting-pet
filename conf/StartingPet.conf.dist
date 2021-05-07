@@ -1,0 +1,27 @@
+[worldserver]
+
+############################################
+#       Starting Pet configuration         #
+############################################
+
+###################################################################################################
+#   StartingPet.Enable
+#       Description: Enable Starting Pet
+#       Default: 1 (enabled)
+#                0 (disabled)
+
+StartingPet.Enable = 1
+
+#   StartingPet.Announce
+#       Description: Announce Module
+#       Default: 1 (enabled)
+#                0 (disabled)
+
+StartingPet.Announce = 1
+
+#   StartingPet.RandName
+#       Description: Set random Name for Pet
+#       Default: 1 (enabled)
+#                0 (disabled)
+
+StartingPet.RandName = 1
