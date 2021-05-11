@@ -16,6 +16,7 @@ public:
     void CreateRandomPet(Player* player, bool petName);
     std::string RandName();
     void LearnPetSpells(Player* player);
+    void LearnSpellAndRanksForLevel(uint32 spellId, Player* player);
 
 private:
     std::string const _vowels = "aeiou";
