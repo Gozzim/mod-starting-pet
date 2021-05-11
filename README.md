@@ -1,10 +1,10 @@
 # This is a module for  ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
-## Hunter Starting Pet
+## Hunter and Warlock Starting Pet
 [![core-build](https://github.com/Gozzim/mod-starting-pet/actions/workflows/core-build.yml/badge.svg)](https://github.com/Gozzim/mod-starting-pet)
 [![CodeFactor](https://www.codefactor.io/repository/github/gozzim/mod-starting-pet/badge)](https://www.codefactor.io/repository/github/gozzim/mod-starting-pet)
 
 ## Description
-Module to enable hunters starting with a pet
+Module to enable hunters and warlocks to start with a pet/minion
 
 ## Features
 - Enable/Disable module
@@ -12,6 +12,7 @@ Module to enable hunters starting with a pet
 - Hunters start with a random pet
 - Random pet name
 - Hunters start with all their pet spells
+- Warlocks start with a minion and according spells
 
 ## Installation
 ```

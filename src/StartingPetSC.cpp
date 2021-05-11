@@ -26,6 +26,7 @@ static bool StartingPetEnable;
 static bool StartingPetAnnounce;
 static bool StartingPetHunter;
 static bool StartingPetName;
+static uint32 StartingMinion;
 
 class StartingPetBeforeConfigLoad : public WorldScript {
 public:
@@ -36,6 +37,7 @@ public:
         StartingPetAnnounce = sConfigMgr->GetBoolDefault("StartingPet.Announce", 1);
         StartingPetHunter = sConfigMgr->GetBoolDefault("StartingPet.HunterPet", 1);
         StartingPetName = sConfigMgr->GetBoolDefault("StartingPet.RandName", 1);
+        StartingMinion = sConfigMgr->GetIntDefault("StartingPet.WarlockMinion", 47);
     }
 };
 
@@ -53,6 +55,12 @@ public:
             {
                 sStartingPet->CreateRandomPet(player, StartingPetName);
                 sStartingPet->LearnPetSpells(player);
+            }
+
+            if (StartingMinion > 0 && player->getClass() == CLASS_WARLOCK)
+            {
+                sStartingPet->LearnWarlockSpells(player, StartingMinion);
+                sStartingPet->SummonWarlockMinion(player, StartingMinion);
             }
         }
     }

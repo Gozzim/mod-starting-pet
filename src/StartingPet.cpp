@@ -116,6 +116,37 @@ void StartingPet::LearnPetSpells(Player* player)
     }
 }
 
+void StartingPet::LearnWarlockSpells(Player* player, uint32 minionMask)
+{
+    for (uint32 i = 0; i < 6; ++i)
+    {
+        if (i == 4)
+            continue;
+
+        if (minionMask & (1 << i))
+        {
+            LearnSpellAndRanksForLevel(_warlockSpells[i], player);
+        }
+    }
+}
+
+void StartingPet::SummonWarlockMinion(Player* player, uint32 minionMask)
+{
+    std::vector<uint32> warlockMinions;
+
+    for (uint32 i = 0; i < 5; ++i)
+    {
+        if (minionMask & (1 << i))
+            warlockMinions.push_back(_warlockSpells[i]);
+    }
+
+    if (warlockMinions.empty())
+        return;
+
+    uint32 spellId = warlockMinions[urand(0, warlockMinions.size() - 1)];
+    player->CastSpell(player, spellId, true);
+}
+
 void StartingPet::LearnSpellAndRanksForLevel(uint32 spellId, Player* player)
 {
     player->learnSpell(spellId);
