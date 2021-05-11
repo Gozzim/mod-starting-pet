@@ -117,7 +117,7 @@ void StartingPet::LearnPetSpells(Player* player)
         player->learnSpell(_hunterPetSpells[i]);
     }
 
-    while (mendPet && sSpellMgr->GetSpellInfo(mendPet).BaseLevel <= player->getLevel())
+    while (mendPet && sSpellMgr->GetSpellInfo(mendPet)->BaseLevel <= player->getLevel())
     {
         player->learnSpell(mendPet);
         mendPet = sSpellMgr->GetNextSpellInChain(mendPet);
