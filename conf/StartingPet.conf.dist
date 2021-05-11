@@ -6,7 +6,7 @@
 
 ###################################################################################################
 #   StartingPet.Enable
-#       Description: Enable Starting Pet
+#       Description: Enable Starting Pet Module
 #       Default: 1 (enabled)
 #                0 (disabled)
 
@@ -18,6 +18,13 @@ StartingPet.Enable = 1
 #                0 (disabled)
 
 StartingPet.Announce = 1
+
+#   StartingPet.HunterPet
+#       Description: Enables Hunter Starting Pet
+#       Default: 1 (enabled)
+#                0 (disabled)
+
+StartingPet.HunterPet = 1
 
 #   StartingPet.RandName
 #       Description: Set random Name for Pet

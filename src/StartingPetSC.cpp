@@ -24,6 +24,7 @@
 
 static bool StartingPetEnable;
 static bool StartingPetAnnounce;
+static bool StartingPetHunter;
 static bool StartingPetName;
 
 class StartingPetBeforeConfigLoad : public WorldScript {
@@ -33,6 +34,7 @@ public:
     void OnBeforeConfigLoad(bool /*reload*/) override {
         StartingPetEnable = sConfigMgr->GetBoolDefault("StartingPet.Enable", 1);
         StartingPetAnnounce = sConfigMgr->GetBoolDefault("StartingPet.Announce", 1);
+        StartingPetHunter = sConfigMgr->GetBoolDefault("StartingPet.HunterPet", 1);
         StartingPetName = sConfigMgr->GetBoolDefault("StartingPet.RandName", 1);
     }
 };
@@ -47,7 +49,7 @@ public:
             if (StartingPetAnnounce)
                 ChatHandler(player->GetSession()).SendSysMessage("This server is running the |cff4CFF00StartingPet |rmodule.");
 
-            if (player->getClass() == CLASS_HUNTER)
+            if (StartingPetHunter && player->getClass() == CLASS_HUNTER)
             {
                 sStartingPet->CreateRandomPet(player, StartingPetName);
                 sStartingPet->LearnPetSpells(player);
