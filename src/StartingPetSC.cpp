@@ -28,11 +28,13 @@ static bool StartingPetHunter;
 static bool StartingPetName;
 static uint32 StartingMinion;
 
-class StartingPetBeforeConfigLoad : public WorldScript {
+class StartingPetBeforeConfigLoad : public WorldScript
+{
 public:
     StartingPetBeforeConfigLoad() : WorldScript("StartingPetBeforeConfigLoad") { }
 
-    void OnBeforeConfigLoad(bool /*reload*/) override {
+    void OnBeforeConfigLoad(bool /*reload*/) override
+    {
         StartingPetEnable = sConfigMgr->GetBoolDefault("StartingPet.Enable", 1);
         StartingPetAnnounce = sConfigMgr->GetBoolDefault("StartingPet.Announce", 1);
         StartingPetHunter = sConfigMgr->GetBoolDefault("StartingPet.HunterPet", 1);
@@ -41,15 +43,19 @@ public:
     }
 };
 
-class StartingPetScripts : public PlayerScript {
+class StartingPetScripts : public PlayerScript
+{
 public:
     StartingPetScripts() : PlayerScript("StartingPetScripts") { }
 
-    void OnFirstLogin(Player* player) override {
+    void OnFirstLogin(Player* player) override
+    {
         if (StartingPetEnable)
         {
             if (StartingPetAnnounce)
+            {
                 ChatHandler(player->GetSession()).SendSysMessage("This server is running the |cff4CFF00StartingPet |rmodule.");
+            }
 
             if (StartingPetHunter && player->getClass() == CLASS_HUNTER)
             {
@@ -66,7 +72,8 @@ public:
     }
 };
 
-void AddStartingPetScripts() {
+void AddStartingPetScripts()
+{
     new StartingPetBeforeConfigLoad();
     new StartingPetScripts();
 }
