@@ -35,11 +35,11 @@ public:
 
     void OnBeforeConfigLoad(bool /*reload*/) override
     {
-        StartingPetEnable = sConfigMgr->GetBoolDefault("StartingPet.Enable", 1);
-        StartingPetAnnounce = sConfigMgr->GetBoolDefault("StartingPet.Announce", 1);
-        StartingPetHunter = sConfigMgr->GetBoolDefault("StartingPet.HunterPet", 1);
-        StartingPetName = sConfigMgr->GetBoolDefault("StartingPet.RandName", 1);
-        StartingMinion = sConfigMgr->GetIntDefault("StartingPet.WarlockMinion", 47);
+        StartingPetEnable = sConfigMgr->GetOption<bool>("StartingPet.Enable", 1);
+        StartingPetAnnounce = sConfigMgr->GetOption<bool>("StartingPet.Announce", 1);
+        StartingPetHunter = sConfigMgr->GetOption<bool>("StartingPet.HunterPet", 1);
+        StartingPetName = sConfigMgr->GetOption<bool>("StartingPet.RandName", 1);
+        StartingMinion = sConfigMgr->GetOption<int>("StartingPet.WarlockMinion", 47);
     }
 };
 
