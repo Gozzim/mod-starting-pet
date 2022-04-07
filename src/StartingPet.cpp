@@ -72,7 +72,7 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
     CreatureTemplate const* creatureTemplate = sObjectMgr->GetCreatureTemplate(entry);
     if (!creatureTemplate->family)
     {
-        LOG_ERROR("module", "FirstLogin::CreateRandomPet - Tried to create nonTamablePet {}", creatureTemplate->Entry);
+        LOG_ERROR("module", "StartingPet::CreateRandomPet - Tried to create nonTamablePet {}", creatureTemplate->Entry);
         return;
     }
 
@@ -91,7 +91,7 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
     player->GetClosePoint(px, py, pz, pet->GetObjectSize(), PET_FOLLOW_DIST, pet->GetFollowAngle());
     if (!pet->IsPositionValid())
     {
-        LOG_DEBUG("module", "FirstLogin::CreateRandomPet - Pet (entry {}) not loaded. Suggested coordinates isn't valid (X: {} Y: {})", pet->GetEntry(), pet->GetPositionX(), pet->GetPositionY());
+        LOG_DEBUG("module", "StartingPet::CreateRandomPet - Pet (entry {}) not loaded. Suggested coordinates isn't valid (X: {} Y: {})", pet->GetEntry(), pet->GetPositionX(), pet->GetPositionY());
         delete pet;
         return;
     }
