@@ -99,7 +99,7 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
 
     pet->SetGuidValue(UNIT_FIELD_CREATEDBY, player->GetGUID());
     pet->SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, player->GetFaction());
-    pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->getLevel());
+    pet->SetUInt32Value(UNIT_FIELD_LEVEL, player->GetLevel());
 
     pet->SetPower(POWER_HAPPINESS, PET_MAX_HAPPINESS);
     pet->SetReactState(REACT_DEFENSIVE);
@@ -120,7 +120,7 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
 
     // Initialize Pet Stats
     pet->InitTalentForLevel();
-    pet->InitStatsForLevel(player->getLevel());
+    pet->InitStatsForLevel(player->GetLevel());
 
     pet->SavePetToDB(PET_SAVE_AS_CURRENT);
     player->PetSpellInitialize();
@@ -171,7 +171,7 @@ void StartingPet::LearnSpellAndRanksForLevel(uint32 spellId, Player* player)
 {
     player->learnSpell(spellId);
     uint32 next = sSpellMgr->GetNextSpellInChain(spellId);
-    if (next && sSpellMgr->GetSpellInfo(next)->BaseLevel <= player->getLevel())
+    if (next && sSpellMgr->GetSpellInfo(next)->BaseLevel <= player->GetLevel())
     {
         LearnSpellAndRanksForLevel(next, player);
     }
