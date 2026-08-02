@@ -27,6 +27,13 @@ static bool StartingPetAnnounce;
 static bool StartingPetHunter;
 static bool StartingPetName;
 static uint32 StartingMinion;
+static uint32 StartingPetOrc;
+static uint32 StartingPetDwarf;
+static uint32 StartingPetNightElf;
+static uint32 StartingPetTauren;
+static uint32 StartingPetTroll;
+static uint32 StartingPetBloodElf;
+static uint32 StartingPetDraenei;
 
 class StartingPetBeforeConfigLoad : public WorldScript
 {
@@ -39,7 +46,14 @@ public:
         StartingPetAnnounce = sConfigMgr->GetOption<bool>("StartingPet.Announce", 1);
         StartingPetHunter = sConfigMgr->GetOption<bool>("StartingPet.HunterPet", 1);
         StartingPetName = sConfigMgr->GetOption<bool>("StartingPet.RandName", 1);
-        StartingMinion = sConfigMgr->GetOption<int>("StartingPet.WarlockMinion", 47);
+        StartingPetOrc = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.Orc", 3098);
+        StartingPetDwarf = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.Dwarf", 1128);
+        StartingPetNightElf = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.NightElf", 2031);
+        StartingPetTauren = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.Tauren", 2955);
+        StartingPetTroll = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.Troll", 3122);
+        StartingPetBloodElf = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.BloodElf", 15649);
+        StartingPetDraenei = sConfigMgr->GetOption<uint32>("StartingPet.HunterPet.Draenei", 17199);
+        StartingMinion = sConfigMgr->GetOption<int>("StartingPet.WarlockMinion", 1);
     }
 };
 
@@ -59,7 +73,40 @@ public:
 
             if (StartingPetHunter && player->getClass() == CLASS_HUNTER)
             {
-                sStartingPet->CreateRandomPet(player, StartingPetName);
+                uint32 petEntry = 0;
+                switch (player->getRace())
+                {
+                    case RACE_ORC:
+                        petEntry = StartingPetOrc;
+                        break;
+                    case RACE_DWARF:
+                        petEntry = StartingPetDwarf;
+                        break;
+                    case RACE_NIGHTELF:
+                        petEntry = StartingPetNightElf;
+                        break;
+                    case RACE_TAUREN:
+                        petEntry = StartingPetTauren;
+                        break;
+                    case RACE_TROLL:
+                        petEntry = StartingPetTroll;
+                        break;
+                    case RACE_BLOODELF:
+                        petEntry = StartingPetBloodElf;
+                        break;
+                    case RACE_DRAENEI:
+                        petEntry = StartingPetDraenei;
+                        break;
+                    default:
+                        LOG_ERROR("module", "StartingPetScripts - No configured Hunter pet for race {}", player->getRace());
+                        break;
+                }
+
+                if (petEntry)
+                    sStartingPet->CreateConfiguredPet(player, StartingPetName, petEntry);
+                else
+                    LOG_ERROR("module", "StartingPetScripts - Hunter pet entry is disabled for race {}", player->getRace());
+
                 sStartingPet->LearnPetSpells(player);
             }
 

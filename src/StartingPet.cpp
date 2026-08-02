@@ -16,11 +16,12 @@
  */
 
 #include "StartingPet.h"
+#include "CharmInfo.h"
 
 enum HunterVars
 {
     SPELL_TAME_BEAST    = 13481,
-    SPELL_MEND_PET      = 136,
+    SPELL_GROWL         = 2649,
     PET_MAX_HAPPINESS   = 1048000
 };
 
@@ -56,11 +57,9 @@ std::string StartingPet::RandName()
     return newName.str();
 }
 
-void StartingPet::CreateRandomPet(Player* player, bool petName)
+void StartingPet::CreateConfiguredPet(Player* player, bool petName, uint32 entry)
 {
-    uint32 entry;
     std::string newName;
-    entry = _pets[urand(0, 204)];
 
     // Generate new name for pet
     if (petName)
@@ -70,9 +69,9 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
 
     // Prevent crashed due to bad configuration
     CreatureTemplate const* creatureTemplate = sObjectMgr->GetCreatureTemplate(entry);
-    if (!creatureTemplate->family)
+    if (!creatureTemplate || !creatureTemplate->family)
     {
-        LOG_ERROR("module", "StartingPet::CreateRandomPet - Tried to create nonTamablePet {}", creatureTemplate->Entry);
+        LOG_ERROR("module", "StartingPet::CreateConfiguredPet - Invalid or non-tamable creature entry {}", entry);
         return;
     }
 
@@ -91,7 +90,7 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
     player->GetClosePoint(px, py, pz, pet->GetObjectSize(), PET_FOLLOW_DIST, pet->GetFollowAngle());
     if (!pet->IsPositionValid())
     {
-        LOG_DEBUG("module", "StartingPet::CreateRandomPet - Pet (entry {}) not loaded. Suggested coordinates isn't valid (X: {} Y: {})", pet->GetEntry(), pet->GetPositionX(), pet->GetPositionY());
+        LOG_DEBUG("module", "StartingPet::CreateConfiguredPet - Pet (entry {}) not loaded. Suggested coordinates isn't valid (X: {} Y: {})", pet->GetEntry(), pet->GetPositionX(), pet->GetPositionY());
         delete pet;
         return;
     }
@@ -121,6 +120,17 @@ void StartingPet::CreateRandomPet(Player* player, bool petName)
     // Initialize Pet Stats
     pet->InitTalentForLevel();
     pet->InitStatsForLevel(player->GetLevel());
+
+    // Growl rank 1 is a level-1 Hunter-pet spell. Ensure it is present and
+    // enabled even if a configured family has incomplete level-up spell data.
+    if (!pet->HasSpell(SPELL_GROWL))
+        pet->learnSpell(SPELL_GROWL);
+
+    if (SpellInfo const* growlInfo = sSpellMgr->GetSpellInfo(SPELL_GROWL))
+    {
+        pet->ToggleAutocast(growlInfo, true);
+        pet->GetCharmInfo()->SetSpellAutocast(growlInfo, true);
+    }
 
     pet->SavePetToDB(PET_SAVE_AS_CURRENT);
     player->PetSpellInitialize();

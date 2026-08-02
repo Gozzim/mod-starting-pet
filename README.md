@@ -1,7 +1,7 @@
 # This is a module for  ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
 ## Hunter and Warlock Starting Pet
-[![core-build](https://github.com/Gozzim/mod-starting-pet/actions/workflows/core-build.yml/badge.svg)](https://github.com/Gozzim/mod-starting-pet)
-[![CodeFactor](https://www.codefactor.io/repository/github/gozzim/mod-starting-pet/badge)](https://www.codefactor.io/repository/github/gozzim/mod-starting-pet)
+[![core-build](https://github.com/dannydefeato/mod-starting-pet/actions/workflows/core-build.yml/badge.svg?branch=master)](https://github.com/dannydefeato/mod-starting-pet/actions/workflows/core-build.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/dannydefeato/mod-starting-pet/badge)](https://www.codefactor.io/repository/github/dannydefeato/mod-starting-pet)
 
 ## Description
 Module to enable hunters and warlocks to start with a pet/minion
@@ -9,10 +9,28 @@ Module to enable hunters and warlocks to start with a pet/minion
 ## Features
 - Enable/Disable module
 - Announcement of enabled module on login
-- Hunters start with a random pet
+- Hunters start with a configurable race-themed pet
 - Random pet name
-- Hunters start with all their pet spells
-- Warlocks start with a minion and according spells
+- Hunters start with Call Pet, Revive Pet, Dismiss Pet, and Feed Pet
+- Mend Pet, Eyes of the Beast, Beast Lore, and Tame Beast retain their normal
+  class progression
+- Hunter pets receive Growl rank 1 with autocast enabled
+- Tame Beast remains part of the normal level-10 Hunter quest chain
+- Warlocks start with an Imp by default; the minion mask remains configurable
+
+### Default Hunter pets
+
+| Race | Pet |
+|---|---|
+| Orc | Mottled Boar |
+| Dwarf | Young Black Bear |
+| Night Elf | Young Nightsaber |
+| Tauren | Plainstrider |
+| Troll | Bloodtalon Taillasher |
+| Blood Elf | Feral Dragonhawk Hatchling |
+| Draenei | Ravager Specimen |
+
+Each creature entry can be changed or disabled in `mod_startingpet.conf`.
 
 ## Installation
 ```
